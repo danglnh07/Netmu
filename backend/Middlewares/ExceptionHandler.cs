@@ -30,10 +30,10 @@ public class ExceptionHandler(ILogger<ExceptionHandler> logger) : IExceptionHand
                 exception.GetType().Name,
                 context.Response.StatusCode = StatusCodes.Status400BadRequest
             ),
-            ValidationException => (
-                $"{exception.Message} - Test",
+            UnauthorizeException => (
+                $"{exception.Message}",
                 exception.GetType().Name,
-                context.Response.StatusCode = StatusCodes.Status400BadRequest
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized
             ),
             // Custom InternalServerErrorException and any uncaught exception will be 500
             _ => (
