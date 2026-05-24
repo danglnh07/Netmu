@@ -1,0 +1,63 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:netmu/core/utils/api/api.dart';
+import 'package:netmu/core/utils/logger/logger.dart';
+import 'package:netmu/features/auth/models/register_dto.dart';
+
+import '../../../core/exceptions/api_exception.dart';
+import '../models/login_dto.dart';
+
+class AuthService {
+  late final ApiHelper _api;
+
+  AuthService() {
+    _api = ApiHelper(baseUrl: dotenv.get("API_BASE"));
+  }
+
+  Future<bool> register(RegisterRequest request) async {
+    try {
+      // Make API request
+      var resp = await _api.post(
+        "/auth/register",
+        body: request.toJson(),
+        withAuth: false,
+      );
+
+      // Log response
+      NetmuLog.logger.i(resp.toString());
+
+      return true;
+    } on ApiException catch (e) {
+      // Log exception
+      NetmuLog.logger.e("${e.statusCode} - ${e.message}");
+      return false;
+    }
+  }
+
+  Future<bool> login(LoginRequest request) async {
+    try {
+      // Make request
+      var resp = await _api.post(
+        "/auth/login",
+        fromJson: LoginResponse.fromJson,
+        body: request.toJson(),
+        withAuth: false,
+      );
+
+      if (resp.data == null) {
+        NetmuLog.logger.w("Response unexpectedly null");
+        return false;
+      }
+
+      // Store tokens
+      await _api.tokenStorage.saveTokens(
+        access: resp.data!.accessToken,
+        refresh: resp.data!.refreshToken,
+      );
+
+      return true;
+    } on ApiException catch (e) {
+      NetmuLog.logger.e("${e.statusCode} - ${e.message}");
+      return false;
+    }
+  }
+}
