@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
 using Netmu.Data;
 using Netmu.Exceptions;
+using Netmu.Middlewares;
 using Netmu.Models;
 using Netmu.Repositories.Contracts;
 using Netmu.Repositories.Implementations;
@@ -73,6 +73,9 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+// Exception handler
+builder.Services.AddExceptionHandler<ExceptionHandler>();
+
 var app = builder.Build();
 
 // Seed roles and admin user
@@ -100,30 +103,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Exception handling middleware
-app.Use(async (context, next) =>
-{
-    try
-    {
-        await next();
-    }
-    catch (NotFoundException ex)
-    {
-        context.Response.StatusCode = StatusCodes.Status404NotFound;
-        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-    }
-    catch (BadRequestException ex)
-    {
-        context.Response.StatusCode = StatusCodes.Status400BadRequest;
-        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-    }
-    catch (UnauthorizeException ex)
-    {
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        await context.Response.WriteAsJsonAsync(new { error = ex.Message });
-    }
-});
-
 // Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
@@ -135,6 +114,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors();
+app.UseExceptionHandler(_ => { });
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
