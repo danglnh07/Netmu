@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:netmu/core/themes/theme.dart";
-import "package:netmu/core/utils/logger/logger.dart";
 import "package:netmu/core/widgets/button.dart";
+import "package:netmu/core/widgets/error_message.dart";
 import "package:netmu/core/widgets/form_label.dart";
 import "package:netmu/core/widgets/input.dart";
 import "package:netmu/features/auth/models/register_dto.dart";
@@ -55,7 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         email: email,
         password: password,
       );
-      var success = await widget._service.register(request);
+      var (success, message) = await widget._service.register(request);
 
       // Whether request failed or not, we both set loading state to false
       setState(() => _isLoading = false);
@@ -64,13 +64,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (mounted) {
         if (!success) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Failed to register"),
-                backgroundColor: Color(0xFF6C63FF),
-              ),
+              ErrorMessage(textContent: message!)
             );
-
-          NetmuLog.logger.w("Failed to register");
           return;
         }
 

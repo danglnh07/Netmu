@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:netmu/core/themes/theme.dart";
-import "package:netmu/core/utils/logger/logger.dart";
+import "package:netmu/core/widgets/error_message.dart";
 import "package:netmu/features/auth/models/login_dto.dart";
 import "package:netmu/features/auth/services/auth_service.dart";
 import "package:netmu/features/auth/widgets/auth_form_footer.dart";
@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final username = _usernameController.text;
       final password = _passwordController.text;
       final request = LoginRequest(username: username, password: password);
-      var success = await widget._service.login(request);
+      var (success, message) = await widget._service.login(request);
 
       // Whether request failed or not, we both set loading state to false
       setState(() => _isLoading = false);
@@ -52,13 +52,8 @@ class _LoginScreenState extends State<LoginScreen> {
       if (mounted) {
         if (!success) {
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Center(child: Text("Failed to login")),
-                backgroundColor: Colors.red,
-              )
+              ErrorMessage(textContent: message!)
           );
-
-          NetmuLog.logger.w("Failed to register");
           return;
         }
 

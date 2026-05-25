@@ -40,7 +40,7 @@ class ApiHelper {
   ApiHelper({
     required this.baseUrl,
     TokenStorage? tokenStorage,
-    this.timeout = const Duration(seconds: 60),
+    this.timeout = const Duration(seconds: 10),
     this.onUnauthenticated,
     http.Client? client,
   }) : tokenStorage = tokenStorage ?? SecureTokenStorage() {

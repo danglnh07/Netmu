@@ -13,7 +13,7 @@ class AuthService {
     _api = ApiHelper(baseUrl: dotenv.get("API_BASE"));
   }
 
-  Future<bool> register(RegisterRequest request) async {
+  Future<(bool, String?)> register(RegisterRequest request) async {
     try {
       // Make API request
       var resp = await _api.post(
@@ -25,15 +25,18 @@ class AuthService {
       // Log response
       NetmuLog.logger.i(resp.toString());
 
-      return true;
+      return (true, null);
     } on ApiException catch (e) {
       // Log exception
       NetmuLog.logger.e("${e.statusCode} - ${e.message}");
-      return false;
+      return (false, e.message);
+    } on Exception catch (e) {
+      NetmuLog.logger.e(e);
+      return (false, "Something went wrong, please try again");
     }
   }
 
-  Future<bool> login(LoginRequest request) async {
+  Future<(bool, String?)> login(LoginRequest request) async {
     try {
       // Make request
       var resp = await _api.post(
@@ -45,7 +48,7 @@ class AuthService {
 
       if (resp.data == null) {
         NetmuLog.logger.w("Response unexpectedly null");
-        return false;
+        return (false, "Failed to login! Something went wrong");
       }
 
       // Store tokens
@@ -54,10 +57,13 @@ class AuthService {
         refresh: resp.data!.refreshToken,
       );
 
-      return true;
+      return (true, null);
     } on ApiException catch (e) {
       NetmuLog.logger.e("${e.statusCode} - ${e.message}");
-      return false;
+      return (false, e.message);
+    } on Exception catch (e) {
+      NetmuLog.logger.e(e);
+      return (false, "Something went wrong, please try again");
     }
   }
 }
