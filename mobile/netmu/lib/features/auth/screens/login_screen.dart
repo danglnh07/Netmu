@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
 
         // If success, redirect to login
-        Navigator.pushNamed(context, "/main");
+        Navigator.pushNamedAndRemoveUntil(context, "/main", (route) => false);
       }
     }
   }

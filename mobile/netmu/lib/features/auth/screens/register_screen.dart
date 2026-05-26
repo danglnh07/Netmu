@@ -70,9 +70,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
 
         // If success, redirect to login
-        Navigator.pushNamed(context, "/auth/login");
+        Navigator.pushNamedAndRemoveUntil(context, "/auth/login", (route) => false);
       }
-
     }
   }
 

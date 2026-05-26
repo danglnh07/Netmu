@@ -1,10 +1,9 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:netmu/core/exceptions/api_exception.dart';
 import 'package:netmu/core/utils/api/api.dart';
 import 'package:netmu/core/utils/logger/logger.dart';
+import 'package:netmu/features/auth/models/login_dto.dart';
 import 'package:netmu/features/auth/models/register_dto.dart';
-
-import '../../../core/exceptions/api_exception.dart';
-import '../models/login_dto.dart';
 
 class AuthService {
   late final ApiHelper _api;
@@ -41,7 +40,7 @@ class AuthService {
       // Make request
       var resp = await _api.post(
         "/auth/login",
-        fromJson: LoginResponse.fromJson,
+        fromJson: (data) => LoginResponse.fromJson(data as Map<String, dynamic>),
         body: request.toJson(),
         withAuth: false,
       );

@@ -21,7 +21,10 @@ public class GenericRepository<T>(AppDbContext context) : IGenericRepository<T> 
 
     public async Task<IPagedList<T>> GetPagedListAsync(int page, int size)
     {
-        return await context.Set<T>().Where(x => !x.IsDeleted).ToPagedListAsync(page, size);
+        return await context.Set<T>()
+        .Where(x => !x.IsDeleted)
+        .OrderByDescending(x => x.UpdatedAt)
+        .ToPagedListAsync(page, size);
     }
 
     public void Update(T entity, bool isEntityTracked = true)

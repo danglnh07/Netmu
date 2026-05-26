@@ -107,7 +107,7 @@ class ApiHelper {
   Future<ApiResponse<T>> _send<T>({
     required String method,
     required String path,
-    required T Function(Map<String, dynamic>)? fromJson,
+    required T Function(dynamic)? fromJson,
     Map<String, dynamic>? body,
     Map<String, String>? queryParams,
     Map<String, String>? headers,
@@ -144,7 +144,15 @@ class ApiHelper {
     }
 
     // Check response status
-    _checkStatus(response);
+    try {
+      _checkStatus(response);
+    } on UnauthorizedException catch (e) {
+      if (withAuth) {
+        await tokenStorage.clearTokens();
+        onUnauthenticated?.call();
+      }
+      rethrow;
+    }
 
     // Return API response
     return ApiResponse<T>(
@@ -157,7 +165,7 @@ class ApiHelper {
   /// GET request
   Future<ApiResponse<T>> get<T>(
     String path, {
-    T Function(Map<String, dynamic>)? fromJson,
+    T Function(dynamic)? fromJson,
     Map<String, String>? queryParams,
     Map<String, String>? headers,
     bool withAuth = true,
@@ -173,7 +181,7 @@ class ApiHelper {
   /// POST request
   Future<ApiResponse<T>> post<T>(
     String path, {
-    T Function(Map<String, dynamic>)? fromJson,
+    T Function(dynamic)? fromJson,
     Map<String, dynamic>? body,
     Map<String, String>? queryParams,
     Map<String, String>? headers,
@@ -191,7 +199,7 @@ class ApiHelper {
   /// PUT request
   Future<ApiResponse<T>> put<T>(
     String path, {
-    T Function(Map<String, dynamic>)? fromJson,
+    T Function(dynamic)? fromJson,
     Map<String, dynamic>? body,
     Map<String, String>? queryParams,
     Map<String, String>? headers,
@@ -209,7 +217,7 @@ class ApiHelper {
   /// DELETE request
   Future<ApiResponse<T>> delete<T>(
     String path, {
-    T Function(Map<String, dynamic>)? fromJson,
+    T Function(dynamic)? fromJson,
     Map<String, dynamic>? body,
     Map<String, String>? headers,
     bool withAuth = true,

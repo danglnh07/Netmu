@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:netmu/core/utils/api/token_storage.dart';
 import 'package:netmu/core/utils/logger/logger.dart';
 import 'package:netmu/features/auth/screens/login_screen.dart';
 import 'package:netmu/features/auth/screens/register_screen.dart';
 import 'package:netmu/features/home/splash_screen.dart';
-import 'package:netmu/features/movies/screens/main_screen.dart';
+import 'package:netmu/features/home/main_screen.dart';
 
 Future<void> main() async {
   // Load .env
@@ -15,12 +16,21 @@ Future<void> main() async {
     return;
   }
 
+  // Get token storage
+  final storage = SecureTokenStorage();
+
+  // Check if user is logged in
+  var isLoggedIn = await storage.getAccessToken() != null;
+  NetmuLog.logger.i("Is user logged in: $isLoggedIn");
+
   // Run app
-  runApp(const MyApp());
+  runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+
+  const MyApp({super.key, required this.isLoggedIn});
 
   // This widget is the root of your application.
   @override
@@ -29,10 +39,10 @@ class MyApp extends StatelessWidget {
       title: 'Netmu',
       initialRoute: "/",
       routes: {
-        "/": (context) => WelcomeScreen(),
+        "/": (context) => isLoggedIn ? HomePage() : WelcomeScreen() ,
         "/auth/register": (context) => RegisterScreen(),
         "/auth/login": (context) => LoginScreen(),
-        "/main": (context) => MainScreen(),
+        "/main": (context) => HomePage(),
       },
     );
   }
