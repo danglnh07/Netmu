@@ -21,7 +21,7 @@ class _VideoPageState extends State<VideoPage> {
     Uri uri = Uri.parse(
       widget.url == ""
           ? "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"
-          : "",
+          : widget.url,
     );
 
     // Initialize video controller

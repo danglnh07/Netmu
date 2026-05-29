@@ -35,7 +35,7 @@ class _MovieHomepageState extends State<MovieHomepage> {
   void initState() {
     super.initState();
     _service = MovieService(
-      () => Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false),
+      () => Navigator.pushNamedAndRemoveUntil(context, "/auth/login", (route) => false),
     );
     _loadInitial();
 

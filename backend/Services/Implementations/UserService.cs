@@ -66,4 +66,84 @@ public class UserService(
             RefreshToken = "",
         };
     }
+    
+    public async Task ChangePasswordAsync(Guid id, string oldPassword, string newPassword)
+    {
+        // Get account by ID
+        var account = await userManager.FindByIdAsync(id.ToString());
+        if (account is null)
+        {
+            throw new NotFoundException(nameof(ApplicationUser));
+        }
+
+        // Update password
+        var result = await userManager.ChangePasswordAsync(account, oldPassword, newPassword);
+        if (!result.Succeeded)
+        {
+            throw new InternalServerErrorException("Failed to change password");
+        }
+
+        // Record changes with TimeUpdated
+        var res = await userManager.UpdateAsync(account);
+        if (!res.Succeeded)
+        {
+            throw new InternalServerErrorException("Failed to change password");
+        }
+    }
+
+    public async Task<UserProfileDto> GetProfileAsync(Guid id)
+    {
+        // Get entity from database by ID
+        var account = await userManager.FindByIdAsync(id.ToString());
+
+        if (account is null)
+        {
+            throw new NotFoundException(nameof(ApplicationUser));
+        }
+
+        return new UserProfileDto
+        {
+            Id = account.Id,
+            Username = account.UserName!,
+            Email = account.Email!
+        };
+    }
+
+    public async Task UpdateProfileAsync(Guid id, UpdateProfileDto dto)
+    {
+        // Get entity from database by ID
+        var account = await userManager.FindByIdAsync(id.ToString());
+
+        if (account is null)
+        {
+            throw new NotFoundException(nameof(ApplicationUser));
+        }
+
+        // Update username
+        if (!string.IsNullOrEmpty(dto.Username))
+        {
+            var result = await userManager.SetUserNameAsync(account, dto.Username);
+            if (!result.Succeeded)
+            {
+                throw new InternalServerErrorException("Failed to update profile");
+            }
+        }
+
+        // Update email
+        if (!string.IsNullOrEmpty(dto.Email))
+        {
+            var result = await userManager.SetEmailAsync(account, dto.Email);
+            if (!result.Succeeded)
+            {
+                throw new InternalServerErrorException("Failed to update profile");
+            }
+        }
+
+        // Update account
+        var res = await userManager.UpdateAsync(account);
+        if (!res.Succeeded)
+        {
+            throw new InternalServerErrorException("Failed to update profile");
+        }
+    }
 }

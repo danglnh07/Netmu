@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:netmu/core/themes/theme.dart';
@@ -31,13 +32,12 @@ class CustomAppBar extends SliverAppBar {
             fit: StackFit.expand,
             children: [
               // Poster image
-              Image.network(
-                bannerUrl,
+              CachedNetworkImage(
+                imageUrl: bannerUrl,
                 fit: BoxFit.cover,
-                loadingBuilder: (_, child, progress) => progress == null
-                    ? child
-                    : Container(color: ColorTheme.surfaceVariant),
-                errorBuilder: (_, _, _) => Container(
+                placeholder: (_, _) =>
+                    Container(color: ColorTheme.surfaceVariant),
+                errorWidget: (_, _, _) => Container(
                   color: ColorTheme.surfaceVariant,
                   child: const Icon(
                     Icons.movie_outlined,

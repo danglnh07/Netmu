@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:netmu/core/themes/theme.dart';
 
 class AuthFormFooter extends StatelessWidget {
   final String text;
@@ -19,7 +20,7 @@ class AuthFormFooter extends StatelessWidget {
         text: TextSpan(
           text: '$text ',
           style: const TextStyle(
-            color: Color(0xFF7A7A9D),
+            color: ColorTheme.textSecondary,
             fontSize: 14,
             fontWeight: FontWeight.w400,
           ),
@@ -33,11 +34,11 @@ class AuthFormFooter extends StatelessWidget {
                 child: Text(
                   urlText,
                   style: TextStyle(
-                    color: Color(0xFF6C63FF),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    decoration: TextDecoration.underline,
-                    decorationColor: Color(0xFF6C63FF),
+                  color: ColorTheme.buttonPrimary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  decoration: TextDecoration.underline,
+                  decorationColor: ColorTheme.buttonPrimary,
                   ),
                 ),
               ),

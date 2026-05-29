@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:netmu/core/themes/theme.dart';
 import 'package:netmu/core/widgets/appbar.dart';
 import 'package:netmu/features/movies/widgets/movie_homepage.dart';
+import 'package:netmu/features/profile/widgets/profile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,14 +16,22 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 1;
 
+  Widget getPage() {
+    switch (_currentIndex) {
+      case 0:
+        return ProfilePage();
+      case 1:
+        return const MovieHomepage();
+      default:
+        return Text("");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Appbar(),
-      body: Container(
-        color: ColorTheme.background,
-        child: MovieHomepage(),
-      ),
+      body: Container(color: ColorTheme.background, child: getPage()),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: ColorTheme.surface,

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:async' as dart_async;
 import 'dart:convert';
 import 'dart:io';
@@ -146,7 +145,7 @@ class ApiHelper {
     // Check response status
     try {
       _checkStatus(response);
-    } on UnauthorizedException catch (e) {
+    } on UnauthorizedException catch (_) {
       if (withAuth) {
         await tokenStorage.clearTokens();
         onUnauthenticated?.call();

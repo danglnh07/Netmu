@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:netmu/core/themes/theme.dart';
 
 class MovieTitle extends StatelessWidget {

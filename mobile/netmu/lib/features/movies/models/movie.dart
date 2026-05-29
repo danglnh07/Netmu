@@ -27,8 +27,8 @@ class Movie {
       director: json["director"],
       durationInMinutes: json["durationInMinutes"] as int,
       genres: (json["genres"] as List).cast<String>(),
-      imageUrl: json["imageUrl"],
-      videoUrl: json["videoUrl"]
+      imageUrl: json["imageUrl"] as String,
+      videoUrl: json["videoUrl"] as String
     );
   }
 }
