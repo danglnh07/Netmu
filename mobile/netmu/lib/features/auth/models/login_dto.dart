@@ -22,14 +22,3 @@ class LoginResponse {
     );
   }
 }
-
-class ChangePassword {
-  final String oldPassword;
-  final String newPassword;
-
-  const ChangePassword({required this.oldPassword, required this.newPassword});
-
-  Map<String, dynamic> toJson() {
-    return {"oldPassword": oldPassword, "newPassword": newPassword};
-  }
-}
