@@ -7,6 +7,7 @@ import "package:netmu/features/auth/widgets/auth_form_footer.dart";
 import "package:netmu/core/widgets/button.dart";
 import "package:netmu/core/widgets/input.dart";
 import "package:netmu/core/widgets/form_label.dart";
+import "package:netmu/l10n/app_localizations.dart";
 
 
 
@@ -63,28 +64,10 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  String? validateUsername(String? username) {
-    if (username == null || username.trim().isEmpty) {
-      return 'Username is required';
-    }
-    if (username.trim().length < 3) {
-      return 'At least 3 characters required';
-    }
-    return null;
-  }
-
-  String? validatePassword(String? password) {
-    if (password == null || password.isEmpty) {
-      return 'Password is required';
-    }
-    if (password.length < 8) {
-      return 'Password must be at least 8 characters';
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorTheme.background,
@@ -102,9 +85,9 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // === Header ===
-                const Text(
-                  'Login',
-                  style: TextStyle(
+                Text(
+                  l10n.loginTitle,
+                  style: const TextStyle(
                     fontSize: 38,
                     fontWeight: FontWeight.w800,
                     color: ColorTheme.textPrimary,
@@ -113,9 +96,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Welcome back.',
-                  style: TextStyle(
+                Text(
+                  l10n.loginSubtitle,
+                  style: const TextStyle(
                     fontSize: 15,
                     color: ColorTheme.textSecondary,
                     fontWeight: FontWeight.w400,
@@ -124,28 +107,36 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 40),
 
                 // === Username field ===
-                FormLabel(label: "Username"),
+                FormLabel(label: l10n.usernameLabel),
                 const SizedBox(height: 8),
                 StringInput(
                   controller: _usernameController,
-                  validator: validateUsername,
-                  hint: "e.g. JohnDoe",
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) return l10n.requiredUsername;
+                    if (value.trim().length < 3) return l10n.minUsername;
+                    return null;
+                  },
+                  hint: l10n.usernameHint,
                   icon: Icons.person_outline_rounded,
                 ),
                 const SizedBox(height: 20),
 
                 // === Password ===
-                FormLabel(label: "Password"),
+                FormLabel(label: l10n.passwordLabel),
                 const SizedBox(height: 8),
                 PasswordInput(
                   controller: _passwordController,
-                  validator: validatePassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return l10n.requiredPassword;
+                    if (value.length < 8) return l10n.minPassword;
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 36),
 
                 // === Login button ===
                 FullWidthApiCallButton(
-                  textButton: "Login",
+                  textButton: l10n.loginButton,
                   isLoading: _isLoading,
                   onPress: _onLogin,
                 ),
@@ -153,9 +144,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 // === Footer ===
                 AuthFormFooter(
-                  text: "Do not have an account?",
+                  text: l10n.loginFooter,
                   url: "/auth/register",
-                  urlText: "Create account",
+                  urlText: l10n.loginFooterAction,
                 ),
                 const SizedBox(height: 16),
               ],

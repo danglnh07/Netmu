@@ -1,6 +1,7 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:netmu/l10n/app_localizations.dart';
 
 class VideoPage extends StatefulWidget {
   final String url;
@@ -47,7 +48,7 @@ class _VideoPageState extends State<VideoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Video Player')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.videoPlayerTitle)),
       body: Center(child: Chewie(controller: _controller),),
     );
   }

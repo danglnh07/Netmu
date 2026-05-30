@@ -6,6 +6,7 @@ import 'package:netmu/core/widgets/form_label.dart';
 import 'package:netmu/core/widgets/input.dart';
 import 'package:netmu/features/profile/models/profile_dto.dart';
 import 'package:netmu/features/profile/services/profile_service.dart';
+import 'package:netmu/l10n/app_localizations.dart';
 
 class ChangePassword extends StatefulWidget {
   final ProfileService _service = ProfileService();
@@ -48,31 +49,10 @@ class _ChangePasswordState extends State<ChangePassword> {
     }
   }
 
-  String? validateConfirmPassword(String? password) {
-    if (password == null || password.isEmpty) {
-      return 'Password is required';
-    }
-    if (password.length < 8) {
-      return 'Password must be at least 8 characters';
-    }
-
-    return password == _newPassController.text
-        ? null
-        : "Confirm password must match new password";
-  }
-
-  String? validatePassword(String? password) {
-    if (password == null || password.isEmpty) {
-      return 'Password is required';
-    }
-    if (password.length < 8) {
-      return 'Password must be at least 8 characters';
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorTheme.background,
@@ -90,35 +70,48 @@ class _ChangePasswordState extends State<ChangePassword> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // === Old password field ===
-                FormLabel(label: "Old password"),
+                FormLabel(label: l10n.oldPasswordLabel),
                 const SizedBox(height: 8),
                 PasswordInput(
                   controller: _oldPassController,
-                  validator: validatePassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return l10n.requiredPassword;
+                    if (value.length < 8) return l10n.minPassword;
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 20),
 
                 // === New password field ===
-                FormLabel(label: "New password"),
+                FormLabel(label: l10n.newPasswordLabel),
                 const SizedBox(height: 8),
                 PasswordInput(
                   controller: _newPassController,
-                  validator: validatePassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return l10n.requiredPassword;
+                    if (value.length < 8) return l10n.minPassword;
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 20),
 
                 // === Confirm password field ===
-                FormLabel(label: "Confirm password"),
+                FormLabel(label: l10n.confirmPasswordLabel),
                 const SizedBox(height: 8),
                 PasswordInput(
                   controller: _confirmPassController,
-                  validator: validateConfirmPassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return l10n.requiredPassword;
+                    if (value.length < 8) return l10n.minPassword;
+                    if (value != _newPassController.text) return l10n.confirmPasswordMismatch;
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 20),
 
                 // === Update profile button ===
                 FullWidthApiCallButton(
-                  textButton: "Change password",
+                  textButton: l10n.changePasswordButton,
                   isLoading: _isLoading,
                   onPress: _onChangePassword,
                 ),

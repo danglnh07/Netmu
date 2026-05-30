@@ -1,12 +1,15 @@
 import "package:flutter/material.dart";
 import "package:netmu/core/themes/theme.dart";
 import "package:netmu/core/widgets/button.dart";
+import "package:netmu/l10n/app_localizations.dart";
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: ColorTheme.background,
       body: Center(
@@ -19,9 +22,9 @@ class WelcomeScreen extends StatelessWidget {
             children: [
               const Image(image: AssetImage("assets/images/logo.png")),
 
-              const Text(
-                "Welcome to Netmu",
-                style: TextStyle(
+              Text(
+                l10n.welcomeTitle,
+                style: const TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 30,
                   color: ColorTheme.textPrimary,
@@ -30,7 +33,7 @@ class WelcomeScreen extends StatelessWidget {
 
               // Primary action — forest green, white label
               FullWidthNavigateButton(
-                buttonText: "Register",
+                buttonText: l10n.registerButton,
                 buttonStyle: ButtonStyle(
                   backgroundColor: WidgetStateProperty.resolveWith((states) {
                     if (states.contains(WidgetState.pressed)) {
@@ -55,7 +58,7 @@ class WelcomeScreen extends StatelessWidget {
 
               // Secondary action — surface bg, primary text, bordered
               FullWidthNavigateButton(
-                buttonText: "Login",
+                buttonText: l10n.loginButton,
                 buttonStyle: ButtonStyle(
                   backgroundColor: WidgetStateProperty.resolveWith((states) {
                     if (states.contains(WidgetState.pressed)) {

@@ -4,6 +4,7 @@ import 'package:netmu/features/notifications/models/notification_dto.dart';
 import 'package:netmu/features/notifications/services/notification_service.dart';
 import 'package:netmu/features/notifications/widgets/empty.dart';
 import 'package:netmu/features/notifications/widgets/notification_tile.dart';
+import 'package:netmu/l10n/app_localizations.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
@@ -43,7 +44,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
       setState(() {
         if (!success) {
-          _error = "Failed to load notifications";
+          _error = AppLocalizations.of(context)?.failedLoadNotifications ?? "Failed to load notifications";
         } else {
           _notifications = notifications;
         }
@@ -60,6 +61,8 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: ColorTheme.background,
       appBar: AppBar(
@@ -68,9 +71,9 @@ class _NotificationPageState extends State<NotificationPage> {
         scrolledUnderElevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: ColorTheme.textPrimary),
-        title: const Text(
-          'Notifications',
-          style: TextStyle(
+        title: Text(
+          l10n.notificationsTitle,
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
             color: ColorTheme.textPrimary,
@@ -88,6 +91,8 @@ class _NotificationPageState extends State<NotificationPage> {
     }
 
     if (_error != null) {
+      final l10n = AppLocalizations.of(context)!;
+
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -96,7 +101,7 @@ class _NotificationPageState extends State<NotificationPage> {
             const SizedBox(height: 16),
             FilledButton(
               onPressed: _loadNotifications,
-              child: const Text("Retry"),
+              child: Text(l10n.retry),
             ),
           ],
         ),

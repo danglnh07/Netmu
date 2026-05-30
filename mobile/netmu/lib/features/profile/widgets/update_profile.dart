@@ -6,6 +6,7 @@ import 'package:netmu/core/widgets/form_label.dart';
 import 'package:netmu/core/widgets/input.dart';
 import 'package:netmu/features/profile/models/profile_dto.dart';
 import 'package:netmu/features/profile/services/profile_service.dart';
+import 'package:netmu/l10n/app_localizations.dart';
 
 class UpdateProfile extends StatefulWidget {
   final _service = ProfileService();
@@ -65,29 +66,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
     }
   }
 
-  String? validateUsername(String? username) {
-    if (username == null || username.trim().isEmpty) {
-      return 'Username is required';
-    }
-    if (username.trim().length < 3) {
-      return 'At least 3 characters required';
-    }
-    return null;
-  }
-
-  String? validateEmail(String? email) {
-    if (email == null || email.trim().isEmpty) {
-      return 'Email is required';
-    }
-    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-    if (!emailRegex.hasMatch(email.trim())) {
-      return 'Enter a valid email address';
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorTheme.background,
@@ -105,29 +87,38 @@ class _UpdateProfileState extends State<UpdateProfile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // === Username field ===
-                FormLabel(label: "Username"),
+                FormLabel(label: l10n.usernameLabel),
                 const SizedBox(height: 8),
                 StringInput(
                   controller: _usernameController,
-                  validator: validateUsername,
-                  hint: "e.g. JohnDoe",
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) return l10n.requiredUsername;
+                    if (value.trim().length < 3) return l10n.minUsername;
+                    return null;
+                  },
+                  hint: l10n.usernameHint,
                   icon: Icons.person_outline_rounded,
                 ),
                 const SizedBox(height: 20),
 
                 // === Email field ===
-                FormLabel(label: "Email"),
+                FormLabel(label: l10n.emailLabel),
                 const SizedBox(height: 8),
                 EmailInput(
-                  hint: "abc@gmail.com",
+                  hint: l10n.emailHint,
                   controller: _emailController,
-                  validator: validateEmail,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) return l10n.requiredEmail;
+                    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+                    if (!emailRegex.hasMatch(value.trim())) return l10n.invalidEmail;
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 20),
 
                 // === Update profile button ===
                 FullWidthApiCallButton(
-                  textButton: "Update profile",
+                  textButton: l10n.updateProfileButton,
                   isLoading: _isLoading,
                   onPress: _onUpdateProfile,
                 ),

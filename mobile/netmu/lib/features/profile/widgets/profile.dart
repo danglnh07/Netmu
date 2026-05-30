@@ -1,5 +1,3 @@
-// ─── Profile screen ──────────────────────────────────────────────
-
 import 'package:flutter/material.dart';
 import 'package:netmu/core/themes/theme.dart';
 import 'package:netmu/features/profile/models/profile_dto.dart';
@@ -8,6 +6,7 @@ import 'package:netmu/features/profile/widgets/action_tile.dart';
 import 'package:netmu/features/profile/widgets/change_password.dart';
 import 'package:netmu/features/profile/widgets/section_label.dart';
 import 'package:netmu/features/profile/widgets/update_profile.dart';
+import 'package:netmu/l10n/app_localizations.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -41,6 +40,9 @@ class _ProfilePageState extends State<ProfilePage> {
       });
 
       final profile = await _service.getProfile();
+
+      if (!mounted) return;
+
       if (profile == null) {
         setState(() {
           _error = "Unexpected error occurs";
@@ -49,7 +51,6 @@ class _ProfilePageState extends State<ProfilePage> {
         return;
       }
 
-      if (!mounted) return;
       setState(() {
         _profile = profile;
         _isLoading = false;
@@ -81,6 +82,8 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     if (_error != null) {
+      final l10n = AppLocalizations.of(context)!;
+
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -89,13 +92,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
             const SizedBox(height: 16),
 
-            FilledButton(onPressed: _loadInitial, child: const Text("Retry")),
+            FilledButton(onPressed: _loadInitial, child: Text(l10n.retry)),
           ],
         ),
       );
     }
 
     final profile = _profile!;
+
+    final l10n = AppLocalizations.of(context)!;
 
     return LayoutBuilder(
       builder: (context, constraints) => SingleChildScrollView(
@@ -197,7 +202,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 );
                               },
                               icon: const Icon(Icons.edit_outlined, size: 17),
-                              label: const Text('Edit Profile'),
+                              label: Text(l10n.editProfile),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: ColorTheme.buttonPrimary,
                                 foregroundColor: ColorTheme.textOnAccent,
@@ -218,7 +223,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(height: 24),
 
                     // ── Settings ──────────────────────────────────────────
-                    SectionLabel(label: 'Settings'),
+                    SectionLabel(label: l10n.sectionSettings),
                     const SizedBox(height: 10),
                     Container(
                       decoration: BoxDecoration(
@@ -233,7 +238,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           ActionTile(
                             icon: Icons.lock_outline_rounded,
-                            label: 'Change Password',
+                            label: l10n.changePassword,
                             onTap: () {
                               // TODO: navigate to change password page
                               Navigator.push(
@@ -250,7 +255,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(height: 24),
 
                     // ── Danger zone ───────────────────────────────────────
-                    SectionLabel(label: 'Account'),
+                    SectionLabel(label: l10n.sectionAccount),
                     const SizedBox(height: 10),
                     Container(
                       decoration: BoxDecoration(
@@ -263,7 +268,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       child: ActionTile(
                         icon: Icons.logout_rounded,
-                        label: 'Log Out',
+                        label: l10n.logOut,
                         labelColor: ColorTheme.buttonDanger,
                         iconColor: ColorTheme.buttonDanger,
                         showChevron: false,

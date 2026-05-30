@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:netmu/core/themes/theme.dart';
+import 'package:netmu/l10n/app_localizations.dart';
 
 class EmptyState extends StatelessWidget {
   const EmptyState({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -24,18 +27,18 @@ class EmptyState extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          const Text(
-            'No notifications yet',
-            style: TextStyle(
+          Text(
+            l10n.emptyNotifications,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
               color: ColorTheme.textPrimary,
             ),
           ),
           const SizedBox(height: 6),
-          const Text(
-            "You're all caught up. Check back later.",
-            style: TextStyle(
+          Text(
+            l10n.emptyNotificationsSub,
+            style: const TextStyle(
               fontSize: 14,
               color: ColorTheme.textSecondary,
             ),

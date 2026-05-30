@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:netmu/core/themes/theme.dart';
 import 'package:netmu/features/notifications/widgets/notification_badge.dart';
 import 'package:netmu/features/notifications/widgets/notification_page.dart';
+import 'package:netmu/l10n/app_localizations.dart';
 
 class Appbar extends StatefulWidget implements PreferredSizeWidget {
   const Appbar({super.key});
@@ -47,9 +48,9 @@ class _AppbarState extends State<Appbar> {
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: true,
-      title: const Text(
-        'Netmu',
-        style: TextStyle(
+      title: Text(
+        AppLocalizations.of(context)!.appTitle,
+        style: const TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.w800,
           letterSpacing: -0.5,

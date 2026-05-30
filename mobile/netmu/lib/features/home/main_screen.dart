@@ -3,6 +3,8 @@ import 'package:netmu/core/themes/theme.dart';
 import 'package:netmu/core/widgets/appbar.dart';
 import 'package:netmu/features/movies/widgets/movie_homepage.dart';
 import 'package:netmu/features/profile/widgets/profile.dart';
+import 'package:netmu/features/settings/widgets/settings.dart';
+import 'package:netmu/l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,6 +24,8 @@ class _HomePageState extends State<HomePage> {
         return ProfilePage();
       case 1:
         return const MovieHomepage();
+      case 2:
+        return const SettingsPage();
       default:
         return Text("");
     }
@@ -29,6 +33,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: Appbar(),
       body: Container(color: ColorTheme.background, child: getPage()),
@@ -49,21 +55,21 @@ class _HomePageState extends State<HomePage> {
             fontWeight: FontWeight.w600,
           ),
           unselectedLabelStyle: const TextStyle(fontSize: 11),
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline_rounded),
-              activeIcon: Icon(Icons.person_rounded),
-              label: 'Profile',
+              icon: const Icon(Icons.person_outline_rounded),
+              activeIcon: const Icon(Icons.person_rounded),
+              label: l10n.navProfile,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home_rounded),
-              label: 'Home',
+              icon: const Icon(Icons.home_outlined),
+              activeIcon: const Icon(Icons.home_rounded),
+              label: l10n.navHome,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined),
-              activeIcon: Icon(Icons.settings_rounded),
-              label: 'Settings',
+              icon: const Icon(Icons.settings_outlined),
+              activeIcon: const Icon(Icons.settings_rounded),
+              label: l10n.navSettings,
             ),
           ],
         ),

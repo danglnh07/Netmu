@@ -4,6 +4,7 @@ import 'package:netmu/features/movies/models/movie.dart';
 import 'package:netmu/features/movies/widgets/badges.dart';
 import 'package:netmu/features/movies/widgets/movie_detail_appbar.dart';
 import 'package:netmu/features/movies/widgets/movie_player.dart';
+import 'package:netmu/l10n/app_localizations.dart';
 
 class MovieDetail extends StatefulWidget {
   final Movie movie;
@@ -29,6 +30,8 @@ class _MovieDetailState extends State<MovieDetail> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: ColorTheme.background,
       body: CustomScrollView(
@@ -60,7 +63,7 @@ class _MovieDetailState extends State<MovieDetail> {
 
                   // Director
                   Text(
-                    'Directed by ${movie.director}',
+                    l10n.directedBy(movie.director),
                     style: const TextStyle(
                       fontSize: 13,
                       color: ColorTheme.textSecondary,
@@ -104,9 +107,9 @@ class _MovieDetailState extends State<MovieDetail> {
                   const SizedBox(height: 24),
 
                   // Description
-                  const Text(
-                    'Synopsis',
-                    style: TextStyle(
+                  Text(
+                    l10n.synopsis,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: ColorTheme.textPrimary,
@@ -144,7 +147,7 @@ class _MovieDetailState extends State<MovieDetail> {
                       () => _isDescriptionExpanded = !_isDescriptionExpanded,
                     ),
                     child: Text(
-                      _isDescriptionExpanded ? 'Show less' : 'Read more',
+                      _isDescriptionExpanded ? l10n.showLess : l10n.readMore,
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
@@ -157,9 +160,9 @@ class _MovieDetailState extends State<MovieDetail> {
                   const Divider(color: ColorTheme.border, height: 0.5),
                   const SizedBox(height: 24),
 
-                  const Text(
-                    'Details',
-                    style: TextStyle(
+                  Text(
+                    l10n.details,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: ColorTheme.textPrimary,
@@ -167,9 +170,9 @@ class _MovieDetailState extends State<MovieDetail> {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  _InfoRow(label: 'Director', value: movie.director),
-                  _InfoRow(label: 'Duration', value: _formattedDuration),
-                  _InfoRow(label: 'Genres', value: movie.genres.join(', ')),
+                  _InfoRow(label: l10n.infoDirector, value: movie.director),
+                  _InfoRow(label: l10n.infoDuration, value: _formattedDuration),
+                  _InfoRow(label: l10n.infoGenres, value: movie.genres.join(', ')),
                   const SizedBox(height: 32),
 
                   // Watch button
@@ -190,7 +193,7 @@ class _MovieDetailState extends State<MovieDetail> {
                         Icons.play_circle_fill_rounded,
                         size: 22,
                       ),
-                      label: const Text('Watch Now'),
+                      label: Text(l10n.watchNow),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: ColorTheme.buttonPrimary,
                         foregroundColor: ColorTheme.textOnAccent,

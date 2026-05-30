@@ -9,6 +9,7 @@ import "package:netmu/core/widgets/input.dart";
 import "package:netmu/features/auth/models/register_dto.dart";
 import "package:netmu/features/auth/services/auth_service.dart";
 import "package:netmu/features/auth/widgets/auth_form_footer.dart";
+import "package:netmu/l10n/app_localizations.dart";
 
 
 
@@ -83,39 +84,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  String? validateUsername(String? username) {
-    if (username == null || username.trim().isEmpty) {
-      return 'Username is required';
-    }
-    if (username.trim().length < 3) {
-      return 'At least 3 characters required';
-    }
-    return null;
-  }
-
-  String? validateEmail(String? email) {
-    if (email == null || email.trim().isEmpty) {
-      return 'Email is required';
-    }
-    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-    if (!emailRegex.hasMatch(email.trim())) {
-      return 'Enter a valid email address';
-    }
-    return null;
-  }
-
-  String? validatePassword(String? password) {
-    if (password == null || password.isEmpty) {
-      return 'Password is required';
-    }
-    if (password.length < 8) {
-      return 'Password must be at least 8 characters';
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorTheme.background,
@@ -133,9 +105,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // === Header ===
-                const Text(
-                  'Create Account',
-                  style: TextStyle(
+                Text(
+                  l10n.registerTitle,
+                  style: const TextStyle(
                     fontSize: 38,
                     fontWeight: FontWeight.w800,
                     color: ColorTheme.textPrimary,
@@ -144,9 +116,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Sign up to get started today.',
-                  style: TextStyle(
+                Text(
+                  l10n.registerSubtitle,
+                  style: const TextStyle(
                     fontSize: 15,
                     color: ColorTheme.textSecondary,
                     fontWeight: FontWeight.w400,
@@ -155,38 +127,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 40),
 
                 // === Username field ===
-                FormLabel(label: "Username"),
+                FormLabel(label: l10n.usernameLabel),
                 const SizedBox(height: 8),
                 StringInput(
                   controller: _usernameController,
-                  validator: validateUsername,
-                  hint: "e.g. JohnDoe",
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) return l10n.requiredUsername;
+                    if (value.trim().length < 3) return l10n.minUsername;
+                    return null;
+                  },
+                  hint: l10n.usernameHint,
                   icon: Icons.person_outline_rounded,
                 ),
                 const SizedBox(height: 20),
 
                 // === Email field ===
-                FormLabel(label: "Email"),
+                FormLabel(label: l10n.emailLabel),
                 const SizedBox(height: 8),
                 EmailInput(
-                  hint: "abc@gmail.com",
+                  hint: l10n.emailHint,
                   controller: _emailController,
-                  validator: validateEmail,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) return l10n.requiredEmail;
+                    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+                    if (!emailRegex.hasMatch(value.trim())) return l10n.invalidEmail;
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 20),
 
                 // === Password ===
-                FormLabel(label: "Password"),
+                FormLabel(label: l10n.passwordLabel),
                 const SizedBox(height: 8),
                 PasswordInput(
                   controller: _passwordController,
-                  validator: validatePassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return l10n.requiredPassword;
+                    if (value.length < 8) return l10n.minPassword;
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 36),
 
                 // === Register button ===
                 FullWidthApiCallButton(
-                  textButton: "Create account",
+                  textButton: l10n.registerButton,
                   isLoading: _isLoading,
                   onPress: _onRegister,
                 ),
@@ -194,9 +179,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 // === Footer ===
                 AuthFormFooter(
-                  text: "Already have an account?",
+                  text: l10n.registerFooter,
                   url: "/auth/login",
-                  urlText: "Login",
+                  urlText: l10n.registerFooterAction,
                 ),
                 const SizedBox(height: 16),
               ],

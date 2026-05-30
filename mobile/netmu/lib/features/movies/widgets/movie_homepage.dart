@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:netmu/features/movies/models/movie.dart';
 import 'package:netmu/features/movies/services/movie_service.dart';
 import 'package:netmu/features/movies/widgets/movie_card.dart';
 import 'package:netmu/features/movies/widgets/section_header.dart';
+import 'package:netmu/l10n/app_localizations.dart';
 
 class MovieHomepage extends StatefulWidget {
   const MovieHomepage({super.key});
@@ -35,7 +38,11 @@ class _MovieHomepageState extends State<MovieHomepage> {
   void initState() {
     super.initState();
     _service = MovieService(
-      () => Navigator.pushNamedAndRemoveUntil(context, "/auth/login", (route) => false),
+      () => Navigator.pushNamedAndRemoveUntil(
+        context,
+        "/auth/login",
+        (route) => false,
+      ),
     );
     _loadInitial();
 
@@ -144,6 +151,10 @@ class _MovieHomepageState extends State<MovieHomepage> {
       );
     }
 
+    final l10n = AppLocalizations.of(context);
+    final popular = l10n?.popularSectionHeader;
+    final discover = l10n?.discoverSectionHeader;
+
     return RefreshIndicator(
       onRefresh: _refresh,
 
@@ -158,7 +169,7 @@ class _MovieHomepageState extends State<MovieHomepage> {
           children: [
             const SizedBox(height: 8),
 
-            const SectionHeader(title: "Popular"),
+            SectionHeader(title: popular ?? "Popular"),
 
             const SizedBox(height: 14),
 
@@ -183,7 +194,7 @@ class _MovieHomepageState extends State<MovieHomepage> {
 
             const SizedBox(height: 32),
 
-            const SectionHeader(title: "Discover"),
+            SectionHeader(title: discover ?? "Discover"),
 
             const SizedBox(height: 14),
 

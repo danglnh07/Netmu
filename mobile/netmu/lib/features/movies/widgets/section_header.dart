@@ -3,7 +3,6 @@ import 'package:netmu/core/themes/theme.dart';
 
 class SectionHeader extends StatelessWidget {
   final String title;
-  // final VoidCallback onSeeAll;
 
   const SectionHeader({super.key, required this.title});
 
@@ -23,17 +22,6 @@ class SectionHeader extends StatelessWidget {
               letterSpacing: -0.3,
             ),
           ),
-          // GestureDetector(
-          //   onTap: onSeeAll,
-          //   child: const Text(
-          //     'See all',
-          //     style: TextStyle(
-          //       fontSize: 13,
-          //       fontWeight: FontWeight.w500,
-          //       color: ColorTheme.buttonPrimary,
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
