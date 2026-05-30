@@ -1,11 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:netmu/core/utils/api/token_storage.dart';
 import 'package:netmu/core/utils/logger/logger.dart';
+import 'package:netmu/features/notifications/widgets/notification_badge.dart';
 import 'package:netmu/features/auth/screens/login_screen.dart';
 import 'package:netmu/features/auth/screens/register_screen.dart';
 import 'package:netmu/features/home/splash_screen.dart';
 import 'package:netmu/features/home/main_screen.dart';
+import 'package:netmu/firebase_options.dart';
+
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+}
 
 Future<void> main() async {
   // Load .env
@@ -22,6 +31,22 @@ Future<void> main() async {
   // Check if user is logged in
   var isLoggedIn = await storage.getAccessToken() != null;
   NetmuLog.logger.i("Is user logged in: $isLoggedIn");
+
+  // Register Firebase Cloud Messaging
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  await messaging.requestPermission();
+
+  // Show badge when a notification arrives while app is in foreground
+  FirebaseMessaging.onMessage.listen((_) {
+    NotificationBadgeNotifier.instance.show();
+  });
 
   // Run app
   runApp(MyApp(isLoggedIn: isLoggedIn));

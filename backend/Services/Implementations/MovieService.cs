@@ -6,7 +6,7 @@ using Netmu.Services.Contracts;
 
 namespace Netmu.Services.Implementations;
 
-public class MovieService(IUnitOfWork uow) : IMovieService
+public class MovieService(IUnitOfWork uow, INotificationService service) : IMovieService
 {
     public async Task<Guid> CreateMovieAsync(MovieDtoRequest request)
     {
@@ -23,6 +23,11 @@ public class MovieService(IUnitOfWork uow) : IMovieService
 
         await uow.Repo<Movie>().CreateAsync(movie);
         await uow.SaveChangesAsync();
+        await service.BroadcastAsync(new()
+        {
+            Title = "New movie arrived",
+            Body = $"New movie {movie.Title} has arrived. Check out soon",
+        });
         return movie.Id;
     }
 

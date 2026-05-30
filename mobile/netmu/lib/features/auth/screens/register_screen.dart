@@ -1,5 +1,7 @@
+import "package:firebase_messaging/firebase_messaging.dart";
 import "package:flutter/material.dart";
 import "package:netmu/core/themes/theme.dart";
+import "package:netmu/core/utils/logger/logger.dart";
 import "package:netmu/core/widgets/button.dart";
 import "package:netmu/core/widgets/error_message.dart";
 import "package:netmu/core/widgets/form_label.dart";
@@ -50,10 +52,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       final username = _usernameController.text;
       final email = _emailController.text;
       final password = _passwordController.text;
+      var deviceToken = await FirebaseMessaging.instance.getToken();
+      if (deviceToken == null) {
+        NetmuLog.logger.e("Failed to get device token");
+        deviceToken = "";
+      }
       final request = RegisterRequest(
         username: username,
         email: email,
         password: password,
+        deviceToken: deviceToken
       );
       var (success, message) = await widget._service.register(request);
 

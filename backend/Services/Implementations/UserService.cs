@@ -26,6 +26,7 @@ public class UserService(
         {
             UserName = dto.Username,
             Email = dto.Email,
+            DeviceToken = dto.DeviceToken,
         };
 
         var result = await userManager.CreateAsync(user, dto.Password);

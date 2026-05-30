@@ -72,6 +72,11 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddSingleton<Fcm>();
+
+// Options pattern
+builder.Services.Configure<FcmSettings>(builder.Configuration.GetSection("FcmSettings"));
 
 // Exception handler
 builder.Services.AddExceptionHandler<ExceptionHandler>();

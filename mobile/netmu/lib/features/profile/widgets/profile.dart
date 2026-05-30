@@ -268,9 +268,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         iconColor: ColorTheme.buttonDanger,
                         showChevron: false,
                         onTap: () async {
-                          // TODO: implement logout action
                           await _service.logout();
-                          // Return to login page
+                          if (!mounted) return;
                           Navigator.pushNamedAndRemoveUntil(
                             context,
                             "/auth/login",
